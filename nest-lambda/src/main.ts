@@ -34,8 +34,14 @@ export interface MyHttpResponse {
 
 type MyHandler = Handler<MyEvent, MyHttpResponse>
 
+let appContext;
+const init = async()=>{
+  return appContext = await NestFactory.createApplicationContext(AppModule, {logger: ['error']});
+}
+const executeInit = init();
+
 export const handler : MyHandler = async (event) => {
-  const appContext = await NestFactory.createApplicationContext(AppModule, {logger: ['error']});
+  await executeInit;
   const appService = appContext.get(AppService);
   const resp : MyHttpResponse = {
     statusCode: 200,
